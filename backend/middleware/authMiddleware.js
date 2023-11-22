@@ -31,3 +31,4 @@ const protect = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = { protect };
+//This middleware (`protect`) aims to secure routes by ensuring that incoming requests have a valid JWT in the `Authorization` header. If the token is valid, it allows the user to access the protected route by attaching the user's information to the request object (`req.user`). Otherwise, it throws an unauthorized error message and status code.
