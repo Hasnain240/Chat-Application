@@ -13,9 +13,9 @@ const app = express();
 
 app.use(express.json()); // to accept json data
 
-app.get("/", (req, res) => {
-  res.send("API Running!");
-});
+// app.get("/", (req, res) => {
+//   res.send("API Running!");
+// });
 
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
@@ -47,7 +47,7 @@ const PORT = process.env.PORT;
 
 const server = app.listen(
   PORT,
-  console.log(`Server running on PORT ${PORT}`.yellow.bold)
+  console.log(`Server running on PORT ${PORT}...`.yellow.bold)
 );
 
 const io = require("socket.io")(server, {
