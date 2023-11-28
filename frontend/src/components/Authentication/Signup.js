@@ -6,6 +6,7 @@ import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useState } from "react";
 import { useHistory } from "react-router";
+import { FormErrorMessage } from "@chakra-ui/react";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -15,10 +16,30 @@ const Signup = () => {
 
   const [name, setName] = useState();
   const [email, setEmail] = useState();
+  const [validEmail, setValidEmail] = useState(true);
   const [confirmpassword, setConfirmpassword] = useState();
   const [password, setPassword] = useState();
+  const [validPassword, setValidPassword] = useState(true);
   const [pic, setPic] = useState();
   const [picLoading, setPicLoading] = useState(false);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleEmailChange = (e) => {
+    const inputEmail = e.target.value;
+    setEmail(inputEmail);
+
+    // Validate email using regex
+    setValidEmail(emailRegex.test(inputEmail));
+  };
+  const handlePasswordChange = (e) => {
+    const inputPassword = e.target.value;
+    setPassword(inputPassword);
+
+    // Validate password length
+    const isValidPassword =
+      inputPassword.length >= 6 && inputPassword.length <= 8;
+    setValidPassword(isValidPassword);
+  };
 
   const submitHandler = async () => {
     setPicLoading(true);
@@ -138,21 +159,25 @@ const Signup = () => {
           onChange={(e) => setName(e.target.value)}
         />
       </FormControl>
-      <FormControl id="email" isRequired>
+      <FormControl id="email" isRequired isInvalid={!validEmail}>
         <FormLabel>Email Address</FormLabel>
         <Input
           type="email"
           placeholder="Enter Your Email Address"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
+          isInvalid={!validEmail}
         />
+        <FormErrorMessage>
+          {!validEmail && "Please enter a valid email address."}
+        </FormErrorMessage>
       </FormControl>
-      <FormControl id="password" isRequired>
+      <FormControl id="password" isRequired isInvalid={!validPassword}>
         <FormLabel>Password</FormLabel>
         <InputGroup size="md">
           <Input
             type={show ? "text" : "password"}
             placeholder="Enter Password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -160,6 +185,10 @@ const Signup = () => {
             </Button>
           </InputRightElement>
         </InputGroup>
+        <FormErrorMessage>
+          {!validPassword &&
+            "Password must be between 6 and 8 characters in length."}
+        </FormErrorMessage>
       </FormControl>
       <FormControl id="password" isRequired>
         <FormLabel>Confirm Password</FormLabel>
